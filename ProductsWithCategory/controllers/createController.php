@@ -10,6 +10,7 @@ require_once("../helper/dataFunctions.php");
  $name = $_POST['name'];
  $description = $_POST['description'];
  $price = $_POST['price'];
+ $categoryid = $_POST['catId'];
 
 // validations for project name
     if (!requireValue($name))  $errors[] = "Project name is required";   
@@ -19,12 +20,14 @@ require_once("../helper/dataFunctions.php");
 $image = uploadFile('file');
 valImage($image,$errors);
 // validations for price
-    if (!requireValue($price))  $errors[] = "price is required";
+    if (!requireValue($price))  $errors[] = "Price is required";
+    if(valNumber($price)) $errors[]= "Price must be a number";
+    if(!requireValue($categoryid)) $errors[]= "You must choose Category";
 
 if(empty($errors)){
 
     $_SESSION['success']= 'Done';
-    $newProject = ['name' =>$name , 'description' => $description , 'image' => $image ,'price'=> $price];
+    $newProject = ['name' =>$name , 'description' => $description , 'image' => $image ,'price'=> $price ,'catId'=>$categoryid];
     insertData($newProject);
     redirect('./../create.php');
 }

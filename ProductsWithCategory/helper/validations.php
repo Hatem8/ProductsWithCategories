@@ -12,6 +12,13 @@ function requireValue($input)
         return true;
     endif;
 }
+function valNumber($input){
+    if(filter_var($input,FILTER_VALIDATE_FLOAT)):
+        return false;
+    else :
+        return true;
+    endif;
+}
 function valEmail($input){
     if (filter_var($input, FILTER_VALIDATE_EMAIL)):
         return false;

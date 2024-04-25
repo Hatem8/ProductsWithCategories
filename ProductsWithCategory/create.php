@@ -1,7 +1,10 @@
 <?php require_once './layouts/head.php'?>
 <?php require_once './helper/functions.php'?>
 <div class="d-flex flex-column h-100 bg-light">
-<?php require_once './layouts/nav.php' ?>
+<?php require_once './layouts/nav.php';
+      require_once './helper/dataFunctions.php';
+      $categories = readAllCategories();
+?>
     <div class="row">
         <div class="col-8 mx-auto my-5">
             <h2 class="border p-2 my-2 text-center">Add Product</h2>
@@ -34,6 +37,14 @@
                     <div class="form-group p-2 my-1">
                         <label for="price">Price</label>
                         <input type="text" name="price" class="form-control" id="price">
+                    </div>
+                    <div class="form-group p-2 my-1">
+                    <label> Category </label>
+                    <select class="form-select" name="catId" aria-label="Default select example" >
+                        <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id']?>"> <?= $category['name']?> </option>
+                        <?php endforeach;?>
+                    </select>
                     </div>
                     <div class="form-group p-2 my-1">
                         <input type="submit" value="Add" class="form-control">

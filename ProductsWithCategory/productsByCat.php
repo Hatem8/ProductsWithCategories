@@ -2,25 +2,33 @@
 <?php require_once './helper/functions.php'?>
 <div class="d-flex flex-column h-100 bg-light">
 <?php require_once './layouts/nav.php';
-require_once './helper/dataFunctions.php';
-$products = readData();
+      require_once './helper/dataFunctions.php';
+      $categories = readAllCategories();
+      if(isset($_SESSION['products'])){
+        $products=$_SESSION['products'];
+        unset($_SESSION['products']);
+      }
 ?>
-
     <div class="row">
         <div class="col-8 mx-auto my-5">
-        <?php if (isset($_SESSION['errors'])):
-        $errors = getSession('errors');
-                    foreach ($errors as $error):?>
-                    <div class="alert alert-danger text-center">
-                            <?php echo $error;?>
-                        </div>
-                    <?php endforeach; endif; ?>
-            <?php if (isset($_SESSION['success'])) : ?>
-                <div class="alert alert-success text-center" role="alert">
-                    <?=getSession('success') ?>
-            </div>
-            <?php endif; ?>
-            <table class="table border rounded p-3 shadow-lg p-3 mb-5 bg-white">
+            <h2 class="border p-2 my-2 text-center">Show Products By Category</h2>
+
+            <form action="./controllers/productsByCategoryController.php" method="POST" class="border p-3" enctype="multipart/form-data">
+                    <div class="form-group p-2 my-1">
+                    <label> Category </label>
+                    <select class="form-select" name="catId" aria-label="Default select example" >
+                        <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id']?>"> <?= $category['name']?> </option>
+                        <?php endforeach;?>
+                    </select>
+                    </div>
+                    <div class="form-group p-2 my-1">
+                        <input type="submit" value="Select" class="form-control">
+                    </div>
+            </form>
+        </div>
+        <div class="col-8 mx-auto my-5">
+        <table class="table border rounded p-3 shadow-lg p-3 mb-5 bg-white">
                 <thead>
                     <tr>
                     <th scope="col">#</th>
@@ -30,10 +38,10 @@ $products = readData();
                     <th scope="col">Price</th>
                     <th scope="col">Category Name</th>
                     <th scope="col">Action</th>
-                    
                     </tr>
                 </thead>
                 <tbody>
+                    <?php if(isset($products)):?>
                     <?php foreach ($products as $product):?>
                     <tr>
                     <th scope="row"><?php echo $product['id']?></th>
@@ -51,10 +59,12 @@ $products = readData();
                         </form>
                     </td>
                     </tr>
-                    <?php endforeach?>
+                    <?php endforeach; endif;?>
+
                 </tbody>
             </table>
-        </div>
+            </div>
     </div>
     <?php require_once './layouts/footer.php'?>
 </div>
+

@@ -10,6 +10,7 @@
                 <li class="nav-item"><a class="nav-link" href="index.php">Show Products</a></li>
                 <li class="nav-item"><a class="nav-link" href="createCat.php">Create Cat</a></li>
                 <li class="nav-item"><a class="nav-link" href="showCat.php">Show Cat</a></li>
+                <li class="nav-item"><a class="nav-link" href="productsByCat.php">Products By Cat</a></li>
             </ul>
         </div>
     </div>

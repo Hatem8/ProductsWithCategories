@@ -39,7 +39,13 @@ function uploadFile($inputFile){
     else {
         $newName= uniqid().".".$ext;
         $destnation= './../uploads/'.$newName;
+        if (file_exists('./../uploads/')){
         move_uploaded_file($f_tmp_name,$destnation);
+        }
+        else {
+            mkdir('./../uploads',0777,true);
+            move_uploaded_file($f_tmp_name,$destnation);
+        }
         return $newName;
     }
    

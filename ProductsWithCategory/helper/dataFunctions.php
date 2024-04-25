@@ -25,6 +25,7 @@ function createCatTable(){
         name VARCHAR(255) NOT NULL UNIQUE
     );';
     $conn ->query($sql);
+
 }
 function createCategory($name){
     $conn = databaseConnect();
@@ -97,15 +98,27 @@ function deleteCategory($id){
 }
 function createProductsTable(){
     $conn = databaseConnect();
+    createCatTable();
     $sql = 'CREATE TABLE IF NOT EXISTS products (
         id BIGINT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         description VARCHAR(255),
         image VARCHAR(255),
-        price BIGINT,
-        category_id VARCHAR(255) REFERENCES categories(id) ON UPDATE CASCADE
+        price FLOAT,
+        category_id BIGINT,
+        FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
     );';
     $conn ->query($sql);
+}
+function readProductsByCatId($id){
+    $conn = databaseConnect();
+    createProductsTable();
+    $query = "SELECT * FROM `products` WHERE `category_id` = '$id' ";
+    $result = mysqli_query($conn,$query);
+    $products = mysqli_fetch_all ($result , MYSQLI_ASSOC);
+    mysqli_free_result($result);
+    mysqli_close($conn);
+    return $products;
 }
 function readData(){
     $conn = databaseConnect();
@@ -134,9 +147,10 @@ function insertData(array $inputData){
     $description = $inputData['description'];
     $image = $inputData['image'];
     $price = $inputData['price'];
+    $catId = $inputData['catId'];
 
-    $query = "INSERT INTO `products`(`name`,`description`,`image`,`price`)
-            VALUES ('$name','$description','$image','$price')
+    $query = "INSERT INTO `products`(`name`,`description`,`image`,`price`,`category_id`)
+            VALUES ('$name','$description','$image','$price','$catId')
     ";
     mysqli_query($conn,$query);
     mysqli_close($conn);
@@ -148,9 +162,11 @@ function updateData(array $inputData){
     $name = $inputData['name'];
     $description = $inputData['description'];
     $image = $inputData['image'];
+    $price = $inputData['price'];
+    $catId = $inputData['catId'];
 
     $query = "UPDATE `products`
-              SET `name` = '$name' , `description` = '$description' , `image` = '$image'
+              SET `name` = '$name' , `description` = '$description' , `image` = '$image', `price` = '$price', `category_id` = '$catId'
              WHERE `id` = $id;
     ";
     mysqli_query($conn,$query);
